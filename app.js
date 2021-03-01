@@ -8,11 +8,23 @@ function app(people){
   let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   let searchResults;
   switch(searchType){
-    case 'yes':
-      searchResults = searchByName(people);
+      case 'yes':
+           searchResults = searchByName(people);
+         
       break;
     case 'no':
-      // TODO: search by traits
+          // TODO: search by traits
+        
+          let foundPerson = people.filter(function (occupation, dob) {
+              if (person.occupation === occupation && person.dob === dob) {
+                  return true;
+              }
+              else {
+                  return false;
+              }
+          })
+         
+
       break;
       default:
     app(people); // restart app
@@ -67,8 +79,8 @@ function searchByName(people){
       return false;
     }
   })
-  // TODO: find the person using the name they entered
-  return foundPerson;
+    // TODO: find the person using the name they entered
+    return foundPerson[0]
 }
 
 // alerts a list of people
