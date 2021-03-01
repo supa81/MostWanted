@@ -14,17 +14,7 @@ function app(people){
       break;
     case 'no':
           // TODO: search by traits
-        
-          let foundPerson = people.filter(function (occupation, dob) {
-              if (person.occupation === occupation && person.dob === dob) {
-                  return true;
-              }
-              else {
-                  return false;
-              }
-          })
-         
-
+          searchResults = SearchByOccupation(people)
       break;
       default:
     app(people); // restart app
@@ -75,14 +65,39 @@ function searchByName(people){
     if(person.firstName === firstName && person.lastName === lastName){
       return true;
     }
-    else{
+    else
+    {
       return false;
     }
   })
     // TODO: find the person using the name they entered
     return foundPerson[0]
 }
-
+   function SearchByOccupation(people) {
+        let occupation = promptFor("What is the person's occupation?", chars);
+        let foundPerson = people.filter(function (person) {
+        if (person.occupation === occupation) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    })
+    return foundPerson
+    }
+    function SearchBydob(people) {
+    let foundPerson = people.filter(function (dob) {
+        if (person.dob === dob) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    })
+    return foundPerson
+}
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){

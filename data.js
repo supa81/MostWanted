@@ -1,6 +1,10 @@
 // You may modify this for testing purposes.
 const data = [
 	{
+
+		// be able to search by gender height weight eye color occupation 
+		//have different functions 
+		//dob will be slightly different -age then convert from birthday 
 		"id": 272822514,
 		"firstName": "Billy",
 		"lastName": "Bob",
