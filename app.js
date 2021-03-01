@@ -10,7 +10,6 @@ function app(people){
   switch(searchType){
       case 'yes':
            searchResults = searchByName(people);
-         
       break;
     case 'no':
           // TODO: search by traits
@@ -83,21 +82,23 @@ function searchByName(people){
         {
             return false;
         }
-    })
-    return foundPerson
+        })
+       return foundPerson[0]
     }
     function SearchBydob(people) {
-    let foundPerson = people.filter(function (dob) {
-        if (person.dob === dob) {
+        let dob = promptFor("What is the person's Date of Birth mm/dd/year?", chars);
+        let foundPerson = people.filter(function (person) {
+            if (person.dob === dob) {
             return true;
         }
-        else
-        {
-            return false;
-        }
+            else
+            {
+                return false;
+            }
     })
-    return foundPerson
+    return foundPerson[0]
 }
+
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){
