@@ -5,17 +5,52 @@ Build all of your functions for displaying and gathering information below (GUI)
 
 // app is the function called to start the entire application
 function app(people){
-  let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
+  let searchType = promptFor("Checking for a specific person? Enter 'yes' to search by name, or enter the person's 'occupation', 'dob', 'height', 'weight', 'EyeColor', 'gender'", yesNo).toLowerCase();
   let searchResults;
   switch(searchType){
       case 'yes':
            searchResults = searchByName(people);
       break;
-    case 'no':
-          // TODO: search by traits
-          searchResults = SearchByOccupation(people)
+
+      case 'occupation':
+        searchResults = SearchByOccupation(people);
       break;
-      default:
+
+      case 'dob':
+        searchResults = SearchBydob(people);
+      break;
+
+      case 'height':
+        searchResults = SearchByHeight(people);
+      break;
+
+      case 'weight':
+        searchResults = SearchByWeight(people);
+      break;
+
+      case 'gender':
+        searchResults = SearchByGender(people);
+      break;
+
+
+      case 'eyecolor':
+        searchResults = SearchByEyecolor(people);
+      break;
+
+
+
+      case 'no':
+                      // TODO: search by traits
+            promptFor("Would you like to check by weight?", yesNo).toLowerCase();//take this out if needed
+           case 'yes':
+          searchResults = SearchByWeight(people);
+           break;
+          // case 'no':
+          //                      //search
+          //     promptFor("Check by weight?", yesNo).toLowerCase();//take this out if needed
+          //       case 'yes':
+          //       searchResults = SearchByWeight(people)
+          //       default:
     app(people); // restart app
       break;
   }
@@ -25,16 +60,19 @@ function app(people){
 }
 
 // Menu function to call once you find who you are looking for
-function mainMenu(person, people){
+function mainMenu(results, people){
 
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
-  if(!person){
-    alert("Could not find that individual.");
+  if(!results){
+    alert("Application did not find that individual.");
     return app(people); // restart
   }
 
-  let displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
+  displayPeople(results);
+
+  // Add prompt here, which result do you want to explore
+  let displayOption = prompt("This application found " + person.firstName + " " + person.lastName + ". Do you want to know this person's 'info', 'family', or 'descendants'? Type that option you or 'restart' or 'quit'");
 
   switch(displayOption){
     case "info":
@@ -60,7 +98,8 @@ function searchByName(people){
   let firstName = promptFor("What is the person's first name?", chars);
   let lastName = promptFor("What is the person's last name?", chars);
 
-  let foundPerson = people.filter(function(person){
+//See array.filter() for more info later. Filter returns new array of filtered results.
+  let foundPerson = people.filter(function(person, idx, persons){
     if(person.firstName === firstName && person.lastName === lastName){
       return true;
     }
@@ -70,9 +109,9 @@ function searchByName(people){
     }
   })
     // TODO: find the person using the name they entered
-    return foundPerson[0]
+    return foundPerson /* try only 'found person' for entire returned array in future queries */
 }
-   function SearchByOccupation(people) {
+    function SearchByOccupation(people) {
         let occupation = promptFor("What is the person's occupation?", chars);
         let foundPerson = people.filter(function (person) {
         if (person.occupation === occupation) {
@@ -83,7 +122,7 @@ function searchByName(people){
             return false;
         }
         })
-       return foundPerson[0]
+       return foundPerson
     }
     function SearchBydob(people) {
         let dob = promptFor("What is the person's Date of Birth mm/dd/year?", chars);
@@ -96,7 +135,74 @@ function searchByName(people){
                 return false;
             }
     })
-    return foundPerson[0]
+    return foundPerson
+}
+function SearchByHeight(people) {
+   // get the height w/ prompt
+   let height = promptFor("What is the person's height in cm?", chars)
+
+   let foundHeights = people.filter(function (people) {
+     // ==, b/c the prompt passes in a height string
+     // and the data has height as a number
+     // So we can't use strict "===", b/c it would throw an error
+     if (people.height == height) {
+       return true
+     } else {
+       return false
+     }
+   })
+   return foundHeights
+}
+
+function SearchByWeight(people) {
+  // get the weight w/ prompt
+  let weight = promptFor("What is the person's weight in pounds?", chars)
+
+  let foundWeights = people.filter(function (people) {
+    // ==, b/c the prompt passes in a weight string
+    // and the data has weight as a number
+    // So we can't use strict "===", b/c it would throw an error
+    if (people.weight == weight) {
+      return true
+    } else {
+      return false
+    }
+  })
+  return foundWeights
+}
+
+function SearchByGender(people) {
+  // get the gender w/ prompt
+  let gender = promptFor("What is the person's gender?", chars)
+
+  let foundGender = people.filter(function (people) {
+    // ==, b/c the prompt passes in a gender string
+    // 
+    // So we can't use strict "===", b/c it would throw an error
+    if (people.gender == gender) {
+      return true
+    } else {
+      return false
+    }
+  })
+  return foundGender
+}
+
+function SearchByEyecolor(people) {
+  // get the eyeColor w/ prompt
+  let eyecolor = promptFor("What is the person's eyeColor?", chars)
+
+  let foundeyecolor = people.filter(function (people) {
+    // ==, b/c the prompt passes in a weight string
+    // and the data has weight as a number
+    // So we can't use strict "===", b/c it would throw an error
+    if (people.eyecolor == eyecolor) {
+      return true
+    } else {
+      return false
+    }
+  })
+  return foundeyecolor
 }
 
 // alerts a list of people
@@ -106,7 +212,18 @@ function displayPeople(people){
   }).join("\n"));
 }
 
+// Multiple Results
+// function displayPersons(results) {
+//    results.forEach((p, idx, ppl) => {
+// // p represents person, idx is index, ppl is the entire array of results
+//      let personInfo = `First Name: ${p.firstName}\nLast Name: ${p.lastName}\n`
+//      alert(personInfo);
+//    });
+// }
+
 function displayPerson(person){
+  // displayResults
+
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
   let personInfo = "First Name: " + person.firstName + "\n";
@@ -125,7 +242,7 @@ function promptFor(question, valid){
 
 // helper function to pass into promptFor to validate yes/no answers
 function yesNo(input){
-  return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
+  return input.toLowerCase() == "yes" || input.toLowerCase() == "no" || input.toLowerCase() == "occupation" || input.toLowerCase() == "dob" || input.toLowerCase() == "height" || input.toLowerCase() == "weight" || input.toLowerCase() == "gender" || input.toLowerCase() == "eyecolor";;
 }
 
 // helper function to pass in as default promptFor validation
