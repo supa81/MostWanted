@@ -5,6 +5,12 @@ Build all of your functions for displaying and gathering information below (GUI)
 
 // app is the function called to start the entire application
 function app(people){
+  
+  let searchResults = SearchForPerson(people);
+  // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
+  mainMenu(searchResults, people);
+}
+function SearchForPerson(people){
   let searchType = promptFor("Checking for a specific person? Enter 'yes' to search by name, or enter the person's 'occupation', 'dob', 'height', 'weight', 'EyeColor', 'gender'", yesNo).toLowerCase();
   let searchResults;
   switch(searchType){
@@ -32,12 +38,13 @@ function app(people){
         searchResults = SearchByGender(people);
       break;
 
-
       case 'eyecolor':
         searchResults = SearchByEyecolor(people);
       break;
 
-
+      case 'info':
+        searchResults = displayPeople(people);//added this line of code #justNow
+      break;
 
       case 'no':
                       // TODO: search by traits
@@ -54,28 +61,31 @@ function app(people){
     app(people); // restart app
       break;
   }
-  
-  // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
-  mainMenu(searchResults, people);
-}
+  if(searchResults.length > 1){
+    displayPeople(searchResults);
+    promptFor("Would you like to narrow searching?")
 
+    SearchForPerson(searchResults);
+  }
+  return searchResults[0];
+}
 // Menu function to call once you find who you are looking for
-function mainMenu(results, people){
+function mainMenu(person, people){
 
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
-  if(!results){
+  if(!person){
     alert("Application did not find that individual.");
     return app(people); // restart
   }
 
-  displayPeople(results);
 
   // Add prompt here, which result do you want to explore
-  let displayOption = prompt("This application found " + person.firstName + " " + person.lastName + ". Do you want to know this person's 'info', 'family', or 'descendants'? Type that option you or 'restart' or 'quit'");
+  let displayOption = prompt("This application found " + person.firstName + " " + person.lastName + " " + person.height + "Do you want to know this person's 'info', 'family', or 'descendants'? Type that option you or 'restart' or 'quit'");
 
   switch(displayOption){
     case "info":
+      displayPerson(person);
     // TODO: get person's info
     break;
     case "family":
@@ -208,7 +218,7 @@ function SearchByEyecolor(people) {
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){
-    return person.firstName + " " + person.lastName;
+    return person.firstName + " " + person.lastName + ", " + person.height + " cm, " + person.eyecolor + " eye color, " + person.gender + ", " + person.weight + " pounds, " + person.dob + " (dob)";
   }).join("\n"));
 }
 
@@ -228,6 +238,15 @@ function displayPerson(person){
   // height, weight, age, name, occupation, eye color.
   let personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
+  personInfo += "Gender: " + person.lastName + "\n";
+  personInfo += "DOB: " + person.lastName + "\n";
+  personInfo += "Height: " + person.lastName + "\n";
+  personInfo += "Weight: " + person.lastName + "\n";
+  personInfo += "Eye Color: " + person.lastName + "\n";
+
+
+
+
   // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }
@@ -242,7 +261,7 @@ function promptFor(question, valid){
 
 // helper function to pass into promptFor to validate yes/no answers
 function yesNo(input){
-  return input.toLowerCase() == "yes" || input.toLowerCase() == "no" || input.toLowerCase() == "occupation" || input.toLowerCase() == "dob" || input.toLowerCase() == "height" || input.toLowerCase() == "weight" || input.toLowerCase() == "gender" || input.toLowerCase() == "eyecolor";;
+  return input.toLowerCase() == "yes" || input.toLowerCase() == "no" || input.toLowerCase() == "occupation" || input.toLowerCase() == "dob" || input.toLowerCase() == "height" || input.toLowerCase() == "weight" || input.toLowerCase() == "gender" || input.toLowerCase() == "eyecolor"|| input.toLowerCase() == "info";
 }
 
 // helper function to pass in as default promptFor validation
